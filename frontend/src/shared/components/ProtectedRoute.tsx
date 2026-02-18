@@ -8,11 +8,14 @@ export default function ProtectedRoute() {
   const { isAuthenticated, isLoading, setUser, clearAuth } = useAuthStore();
 
   useEffect(() => {
+    // Only verify auth on the initial boot (isLoading = true).
+    // After login/logout the store is already up-to-date — no re-check needed.
+    if (!isLoading) return;
     authApi
       .getMe()
       .then((user) => setUser(user))
       .catch(() => clearAuth());
-  }, [setUser, clearAuth]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (

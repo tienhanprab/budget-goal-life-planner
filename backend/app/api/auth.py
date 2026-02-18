@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
@@ -89,8 +90,8 @@ async def logout(
             remaining = max(0, int(exp - datetime.now(timezone.utc).timestamp()))
             if jti and remaining > 0:
                 await blacklist_token(jti, remaining, redis)
-        except ValueError:
-            pass
+        except Exception:
+            pass  # Redis unavailable or invalid token — still clear cookies
 
     clear_auth_cookies(response)
     return {"message": "Logged out successfully"}
@@ -119,7 +120,12 @@ async def refresh(
     if jti and await is_blacklisted(jti, redis):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token revoked")
 
-    user = await db.get(User, payload["sub"])
+    try:
+        user_id = uuid.UUID(payload["sub"])
+    except (ValueError, KeyError):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token subject")
+
+    user = await db.get(User, user_id)
     if not user or not user.is_active:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
 
