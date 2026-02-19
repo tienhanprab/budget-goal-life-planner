@@ -2,6 +2,8 @@
 .env
 !.env.example
 
+gha-key.json
+
 # Python
 __pycache__/
 *.py[cod]
