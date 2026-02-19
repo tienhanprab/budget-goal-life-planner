@@ -68,8 +68,10 @@ async def is_blacklisted(jti: str, redis: Redis) -> bool:
 
 def set_auth_cookies(response: Response, access_token: str, refresh_token: str) -> None:
     is_prod = settings.is_production
+    # Firebase Hosting only forwards the "__session" cookie to Cloud Run.
+    # All other cookies are stripped from GET requests by the CDN.
     response.set_cookie(
-        key="access_token",
+        key="__session",
         value=access_token,
         httponly=True,
         samesite="lax",
@@ -89,5 +91,5 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
 
 
 def clear_auth_cookies(response: Response) -> None:
-    response.delete_cookie(key="access_token", path="/")
+    response.delete_cookie(key="__session", path="/")
     response.delete_cookie(key="refresh_token", path="/api/v1/auth/refresh")

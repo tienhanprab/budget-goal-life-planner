@@ -38,7 +38,7 @@ export function useUpdateGoal() {
       await qc.cancelQueries({ queryKey: ['goals'] });
       const snapshots = qc.getQueriesData<Goal[]>({ queryKey: ['goals'] });
       qc.setQueriesData<Goal[]>({ queryKey: ['goals'] }, (old) =>
-        old?.map((g) => (g.id === id ? { ...g, ...data } : g))
+        Array.isArray(old) ? old.map((g) => (g.id === id ? { ...g, ...data } : g)) : old
       );
       return { snapshots };
     },
@@ -60,7 +60,7 @@ export function useUpdateGoalSaved() {
       await qc.cancelQueries({ queryKey: ['goals'] });
       const snapshots = qc.getQueriesData<Goal[]>({ queryKey: ['goals'] });
       qc.setQueriesData<Goal[]>({ queryKey: ['goals'] }, (old) =>
-        old?.map((g) => (g.id === id ? { ...g, saved: amount } : g))
+        Array.isArray(old) ? old.map((g) => (g.id === id ? { ...g, saved: amount } : g)) : old
       );
       return { snapshots };
     },
@@ -81,7 +81,7 @@ export function useDeleteGoal() {
       await qc.cancelQueries({ queryKey: ['goals'] });
       const snapshots = qc.getQueriesData<Goal[]>({ queryKey: ['goals'] });
       qc.setQueriesData<Goal[]>({ queryKey: ['goals'] }, (old) =>
-        old?.filter((g) => g.id !== id)
+        Array.isArray(old) ? old.filter((g) => g.id !== id) : old
       );
       return { snapshots };
     },

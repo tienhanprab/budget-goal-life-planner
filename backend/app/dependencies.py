@@ -19,7 +19,7 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db),
     redis: Redis = Depends(get_redis),
 ) -> User:
-    token = request.cookies.get("access_token")
+    token = request.cookies.get("__session")
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 

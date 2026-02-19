@@ -81,7 +81,7 @@ async def logout(
     redis=Depends(get_redis),
     current_user: User = Depends(get_current_user),
 ):
-    token = request.cookies.get("access_token")
+    token = request.cookies.get("__session")
     if token:
         try:
             payload = decode_token(token)
