@@ -22,13 +22,13 @@ export default function OverallProgressCard({ summary }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-200">
+        <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-200 min-w-0">
           <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-1">Total Saved</p>
-          <p className="text-2xl font-bold text-emerald-900">{formatCurrency(total_saved)}</p>
+          <p className="text-lg sm:text-2xl font-bold text-emerald-900 break-words">{formatCurrency(total_saved)}</p>
         </div>
-        <div className="bg-blue-50 rounded-2xl p-5 border border-blue-200">
+        <div className="bg-blue-50 rounded-2xl p-5 border border-blue-200 min-w-0">
           <p className="text-blue-700 text-xs font-semibold uppercase tracking-wide mb-1">Total Target</p>
-          <p className="text-2xl font-bold text-blue-900">{formatCurrency(total_target)}</p>
+          <p className="text-lg sm:text-2xl font-bold text-blue-900 break-words">{formatCurrency(total_target)}</p>
         </div>
       </div>
 
